@@ -15,28 +15,32 @@ namespace Bingo
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Label[,] player1Card;
-        private Label[,] player2Card;
-        private List<int> bingoNumbers = new List<int>();
-        private DispatcherTimer gameTimer;
-        private Random random = new Random();
+        private Label[,] _player1Card;
+        private Label[,] _player2Card;
+        private List<int> _bingoNumbers = new List<int>();
+        private DispatcherTimer _gameTimer;
+        private Random _random = new Random();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            gameTimer = new DispatcherTimer();
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Interval = TimeSpan.FromSeconds(2);
+            _gameTimer = new DispatcherTimer();
+            _gameTimer.Tick += GameTimer_Tick;
+            _gameTimer.Interval = TimeSpan.FromSeconds(2);
         }
-
-
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            for(int row = 0; row < 5; row++)
+            InitializeGrid(player1Grid);
+            InitializeGrid(player2Grid);
+        }
+
+        private void InitializeGrid(Grid bingoGrid)
+        {
+            for (int row = 0; row < 5; row++)
             {
-                for(int col = 0; col < 5; col++) 
+                for (int col = 0; col < 5; col++)
                 {
                     if (row == 2 && col == 2)
                     {
@@ -83,31 +87,31 @@ namespace Bingo
                     case 0:
                         do
                         {
-                            randomNumber = random.Next(1, 16);
+                            randomNumber = _random.Next(1, 16);
                         } while(usedNumbers.Contains(randomNumber));
                         break;
                     case 1:
                         do
                         {
-                            randomNumber = random.Next(16, 31);
+                            randomNumber = _random.Next(16, 31);
                         } while (usedNumbers.Contains(randomNumber));
                         break;
                     case 2:
                         do
                         {
-                            randomNumber = random.Next(31, 46);
+                            randomNumber = _random.Next(31, 46);
                         } while (usedNumbers.Contains(randomNumber));
                         break;
                     case 3:
                         do
                         {
-                            randomNumber = random.Next(46, 61);
+                            randomNumber = _random.Next(46, 61);
                         } while (usedNumbers.Contains(randomNumber));
                         break;
                     case 4:
                         do
                         {
-                            randomNumber = random.Next(61, 76);
+                            randomNumber = _random.Next(61, 76);
                         } while (usedNumbers.Contains(randomNumber));
                         break;
                 }
@@ -124,13 +128,13 @@ namespace Bingo
 
         private void OnNewGameClicked(object sender, RoutedEventArgs e)
         {
-            player1Card = GeneratePlayerCard(bingoGrid);
-            // player2Card = GeneratePlayerCard(bingoGrid2);
+            _player1Card = GeneratePlayerCard(player1Grid);
+            _player2Card = GeneratePlayerCard(player2Grid);
 
-            bingoNumbers.Clear();
+            _bingoNumbers.Clear();
             numbersListBox.Items.Clear();
 
-            gameTimer.Start();
+            _gameTimer.Start();
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -138,21 +142,30 @@ namespace Bingo
             int randomNumber = 0;
             do
             {
-                randomNumber = random.Next(1, 76);
-            } while(bingoNumbers.Contains(randomNumber));
+                randomNumber = _random.Next(1, 76);
+            } while(_bingoNumbers.Contains(randomNumber));
 
-            bingoNumbers.Add(randomNumber);
+            _bingoNumbers.Add(randomNumber);
             numbersListBox.Items.Add(randomNumber.ToString());
+            numbersListBox.ScrollIntoView(randomNumber);
 
-            if (CheckNumber(randomNumber, player1Card, out int row, out int col))
+            if (CheckNumber(randomNumber, _player1Card, out int row, out int col))
             {
-                if(CheckFullRowOrColumn(player1Card, row, col))
+                if(CheckFullRowOrColumn(_player1Card, row, col))
                 {
-                    gameTimer.Stop();
-                    MessageBox.Show("Gewonnen!");
+                    _gameTimer.Stop();
+                    MessageBox.Show("Speler 1 gewonnen!");
                 }
             }
-            //CheckNumber(randomNumber, player2Card);
+            if (CheckNumber(randomNumber, _player2Card, out int row2, out int col2))
+            {
+                if (CheckFullRowOrColumn(_player2Card, row, col))
+                {
+                    _gameTimer.Stop();
+                    MessageBox.Show("Speler 2 gewonnen!");
+                }
+            }
+            
         }
 
         private bool CheckNumber(int number, Label[,] playerCard, out int row, out int col)

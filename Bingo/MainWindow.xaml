@@ -41,7 +41,9 @@
                 
             </Grid>
             
-            <ListBox x:Name="numbersListBox" Grid.Column="1" Grid.RowSpan="2" Width="200"></ListBox>
+            <ListBox x:Name="numbersListBox" Grid.Column="1" Grid.RowSpan="2" Width="200">
+                
+            </ListBox>
 
             <Grid Grid.Row="1" x:Name="player2Grid" Grid.Column="2">
                 <Grid.RowDefinitions>
