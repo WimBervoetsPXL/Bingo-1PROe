@@ -27,7 +27,7 @@ namespace Bingo
 
             gameTimer = new DispatcherTimer();
             gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Interval = TimeSpan.FromSeconds(5);
+            gameTimer.Interval = TimeSpan.FromSeconds(2);
         }
 
 
@@ -173,19 +173,41 @@ namespace Bingo
         {
             for(int row = 0; row < 5; row++) 
             {
-                int sum = 0;
+                bool fullRow = true;
                 for(int col = 0; col < 5; col++)
                 {
-                    if(playerCard[row, col].Background == Brushes.Red)
+                    if (playerCard[row, col] != null)
                     {
-                        sum++;
-                    }
-                    else
-                    {
-                        break;
+                        if (playerCard[row, col].Background != Brushes.Red)
+                        {
+                            fullRow = false;
+                            break;
+                        }
                     }
                 }
-                if(sum == 5)
+
+                if(fullRow)
+                {
+                    return true;
+                }
+            }
+
+            for (int col = 0; col < 5; col++)
+            {
+                bool fullCol = true;
+                for (int row = 0; row < 5; row++) 
+                {
+                    if (playerCard[row, col] != null)
+                    {
+                        if (playerCard[row, col].Background != Brushes.Red)
+                        {
+                            fullCol = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (fullCol)
                 {
                     return true;
                 }
