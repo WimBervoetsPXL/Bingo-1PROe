@@ -144,9 +144,9 @@ namespace Bingo
             bingoNumbers.Add(randomNumber);
             numbersListBox.Items.Add(randomNumber.ToString());
 
-            if (CheckNumber(randomNumber, player1Card) == true)
+            if (CheckNumber(randomNumber, player1Card, out int row, out int col))
             {
-                if(CheckFullRowOrColumn(player1Card) == true)
+                if(CheckFullRowOrColumn(player1Card, row, col))
                 {
                     gameTimer.Stop();
                     MessageBox.Show("Gewonnen!");
@@ -155,13 +155,17 @@ namespace Bingo
             //CheckNumber(randomNumber, player2Card);
         }
 
-        private bool CheckNumber(int number, Label[,] playerCard)
+        private bool CheckNumber(int number, Label[,] playerCard, out int row, out int col)
         {
+            row = 0;
+            col = 0;
             foreach(Label label in playerCard)
             {
                 if(label != null && label.Content.Equals(number.ToString()))
                 {
                     label.Background = Brushes.Red;
+                    row = Grid.GetRow(label);
+                    col = Grid.GetColumn(label);
                     return true;
                 }
             }
@@ -169,49 +173,47 @@ namespace Bingo
             return false;
         }
 
-        private bool CheckFullRowOrColumn(Label[,] playerCard)
+        private bool CheckFullRowOrColumn(Label[,] playerCard, int rowToCheck, int colToCheck)
         {
-            for(int row = 0; row < 5; row++) 
+       
+            bool fullRow = true;
+            for(int col = 0; col < 5; col++)
             {
-                bool fullRow = true;
-                for(int col = 0; col < 5; col++)
+                if (playerCard[rowToCheck, col] != null)
                 {
-                    if (playerCard[row, col] != null)
+                    if (playerCard[rowToCheck, col].Background != Brushes.Red)
                     {
-                        if (playerCard[row, col].Background != Brushes.Red)
-                        {
-                            fullRow = false;
-                            break;
-                        }
+                        fullRow = false;
+                        break;
                     }
-                }
-
-                if(fullRow)
-                {
-                    return true;
                 }
             }
 
-            for (int col = 0; col < 5; col++)
+            if(fullRow)
             {
-                bool fullCol = true;
-                for (int row = 0; row < 5; row++) 
+                return true;
+            }
+            
+
+      
+            bool fullCol = true;
+            for (int row = 0; row < 5; row++) 
+            {
+                if (playerCard[row, colToCheck] != null)
                 {
-                    if (playerCard[row, col] != null)
+                    if (playerCard[row, colToCheck].Background != Brushes.Red)
                     {
-                        if (playerCard[row, col].Background != Brushes.Red)
-                        {
-                            fullCol = false;
-                            break;
-                        }
+                        fullCol = false;
+                        break;
                     }
                 }
-
-                if (fullCol)
-                {
-                    return true;
-                }
             }
+
+            if (fullCol)
+            {
+                return true;
+            }
+            
 
             return false;
         }

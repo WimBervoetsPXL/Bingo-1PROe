@@ -14,15 +14,16 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
 
-            <Grid Grid.Row="1" x:Name="bingoGrid">
+            <Grid Grid.Row="1" x:Name="player1Grid">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -39,7 +40,26 @@
                 </Grid.ColumnDefinitions>
                 
             </Grid>
+            
             <ListBox x:Name="numbersListBox" Grid.Column="1" Grid.RowSpan="2" Width="200"></ListBox>
+
+            <Grid Grid.Row="1" x:Name="player2Grid" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>
